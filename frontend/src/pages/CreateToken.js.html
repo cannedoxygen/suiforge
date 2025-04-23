@@ -1,0 +1,142 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useWallet } from '@mysten/wallet-kit';
+import TokenCreationForm from '../components/TokenCreationForm';
+import { useAuth } from '../context/AuthContext';
+import '../styles/CreateToken.css';
+
+const CreateToken = () => {
+  const { connected } = useWallet();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [showOptions, setShowOptions] = useState(false);
+
+  return (
+    <div className="create-token-container">
+      <div className="create-token-header">
+        <h1>Create Your Meme Token</h1>
+        <p className="subtitle">
+          Launch your own meme token on Sui in minutes with automatic liquidity and anti-bot protection
+        </p>
+      </div>
+
+      <div className="creation-options">
+        {(!connected && !isAuthenticated) ? (
+          <div className="auth-required">
+            <h2>Connect to Create a Token</h2>
+            <p>You need to connect a wallet or use zkLogin to create a token</p>
+            
+            <div className="connection-options">
+              <button 
+                className="connect-wallet-btn"
+                onClick={() => document.getElementById('wallet-btn').click()}
+              >
+                Connect Wallet
+              </button>
+              <span className="or-divider">OR</span>
+              <button 
+                className="zklogin-btn"
+                onClick={() => navigate('/auth')}
+              >
+                Continue with zkLogin
+              </button>
+            </div>
+          </div>
+        ) : !showOptions ? (
+          <div className="creation-method-selection">
+            <h2>How would you like to create your token?</h2>
+            
+            <div className="selection-options">
+              <div 
+                className="selection-card"
+                onClick={() => setShowOptions('form')}
+              >
+                <div className="card-icon">📝</div>
+                <h3>Creation Form</h3>
+                <p>Use our guided form to create your token step by step</p>
+              </div>
+              
+              <div 
+                className="selection-card"
+                onClick={() => navigate('/social')}
+              >
+                <div className="card-icon">🐦</div>
+                <h3>Social Media</h3>
+                <p>Simply mention @SuiForge_AI on Twitter, Farcaster, or Telegram</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <TokenCreationForm />
+        )}
+      </div>
+      
+      <div className="token-features">
+        <h2>SuiForge Features</h2>
+        
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon">🔒</div>
+            <h3>Locked Liquidity</h3>
+            <p>LP tokens are automatically locked for 30 days to prevent rug pulls</p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon">🤖</div>
+            <h3>Anti-Bot Protection</h3>
+            <p>Advanced mechanisms to prevent bots from sniping your token launch</p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon">🎨</div>
+            <h3>AI-Generated Art</h3>
+            <p>Unique meme imagery created by AI specifically for your token</p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon">📊</div>
+            <h3>Instant Liquidity</h3>
+            <p>Automatic liquidity pool creation on major Sui DEXes</p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="recent-launches">
+        <h2>Recent Token Launches</h2>
+        <p>Check out these recently created meme tokens</p>
+        
+        <div className="token-cards">
+          {/* This would be populated from API data */}
+          <div className="token-card">
+            <div className="token-image">🚀</div>
+            <div className="token-info">
+              <h3>MoonRocket</h3>
+              <div className="token-symbol">$MRKT</div>
+              <div className="token-time">Created 2 hours ago</div>
+            </div>
+          </div>
+          
+          <div className="token-card">
+            <div className="token-image">🐱</div>
+            <div className="token-info">
+              <h3>CatCoin</h3>
+              <div className="token-symbol">$CCAT</div>
+              <div className="token-time">Created 6 hours ago</div>
+            </div>
+          </div>
+          
+          <div className="token-card">
+            <div className="token-image">🍌</div>
+            <div className="token-info">
+              <h3>BananaPepe</h3>
+              <div className="token-symbol">$BAPE</div>
+              <div className="token-time">Created 12 hours ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreateToken;
